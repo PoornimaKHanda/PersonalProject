@@ -1,12 +1,16 @@
 import './App.css';
-import UrlShortner from './UrlShortner';
-import BackgroundAnimate from './BackgroundAnimate';
+import UrlShortner from './components/UrlShortner';
+import BackgroundAnimate from './components/BackgroundAnimate';
+import LinkResult from './components/LinkResult';
+import { useState } from 'react';
 
 function App() {
+  const [inputValue, setInputValue] = useState("");
   return (
     <div className="container">
-      <UrlShortner/>
+      <UrlShortner setInputValue={setInputValue}/>
       <BackgroundAnimate/>
+      <LinkResult inputValue={inputValue}/>
     </div>
   );
 }

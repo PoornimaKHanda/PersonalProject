@@ -6,3 +6,10 @@ Springboot starter project with 2 api
 
 # Hash function
    In Java, MessageDigest.getInstance("SHA-256") is used to create a MessageDigest object that implements the SHA-256 hash algorithm. SHA-256(Secure Hash Algorithm 256-bit) is a cryptographic hash function that generates a 256-bit (32-byte) hash value from the input data. This function is commonly used for data integrity verification and password hashing.
+
+# backend code running in local
+go to project source folder in terminal and run
+    docker-compose up
+    brew services start redis
+    redis-cli ping
+    start the application
