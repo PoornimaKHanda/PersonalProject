@@ -8,6 +8,7 @@ const LinkResult = ({inputValue}) => {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
   const fetchData = async()=>{
     try{
       setLoading(true);
@@ -26,9 +27,7 @@ const LinkResult = ({inputValue}) => {
     if(inputValue.length){
       fetchData();
     }
-  },[inputValue]);
-
-
+  }, [inputValue]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -59,6 +58,6 @@ const LinkResult = ({inputValue}) => {
     </>
     
   );
-};
+}
 
 export default LinkResult;
