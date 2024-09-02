@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UrlMappingService {
@@ -20,11 +21,23 @@ public class UrlMappingService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    @Value("${url.shortening.length:7}")  // Use application properties for configurable values
+    @Value("${url.shortening.length}")  // Use application properties for configurable values
     private int urlShorteningLength;
 
     public String shortenUrl(String originalUrl) {
         String shortUrl = generateShortUrl(originalUrl, urlShorteningLength);
+        String existingUrl = redisTemplate.opsForValue().get(shortUrl);
+        int attempt = 0;
+        Random random = new Random();
+        // Regenerate the short URL if a collision is found
+        while (existingUrl != null && !existingUrl.equals(originalUrl) && attempt<3) {
+            logger.warn("Collision detected for short URL: {}. Regenerating...", shortUrl);
+            attempt++;
+            // Modify the original URL slightly to generate a new hash
+            String modifiedUrl = originalUrl + random.nextInt(1000) + attempt;
+            shortUrl = generateShortUrl(modifiedUrl, urlShorteningLength);
+            existingUrl = redisTemplate.opsForValue().get(shortUrl);
+        }
         // Create a new URL mapping and save it in Redis
         redisTemplate.opsForValue().set(shortUrl, originalUrl);
         return shortUrl;
